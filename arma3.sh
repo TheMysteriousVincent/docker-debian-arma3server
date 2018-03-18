@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 SERVER_NAME="arma3server"
 TOOLS_PATH="/root/arma3server/tools"
 LOG_PATH="/root/arma3server/logs"

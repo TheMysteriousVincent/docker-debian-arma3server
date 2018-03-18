@@ -1,46 +1,24 @@
 FROM debian:stable-slim
 
-ARG LOG_PATH
-ARG STEAM_USER
-ARG STEAM_PASS
-ARG STEAM_API_KEY
-ARG STEAM_COLLECTION_ID
-ARG SERVER_KEYS_EXCEPT
-ARG SERVER_CLIENT_WORKSHOP_MODS
-ARG SERVER_CLIENT_MODS
-ARG STEAM_SERVER_WORKSHOP_MODS
-ARG SERVER_SERVER_MODS
-ARG SERVER_PARAMETERS
-
-ENV SERVER_PATH /home/arma3server/server
-ENV SERVER_EXEC_NAME arma3server
-ENV TOOLS_PATH /home/arma3server/tools
-ENV LOG_PATH /home/arma3server/logs
-ENV STEAM_USER ${STEAM_USER}
-ENV STEAM_PASS ${STEAM_PASS}
-ENV STEAM_API_KEY ${STEAM_API_KEY}
-ENV STEAM_COLLECTION_ID ${STEAM_COLLECTION_ID}
-ENV SERVER_KEYS_EXCEPT ${SERVER_EXEC_NAME}
-ENV SERVER_CLIENT_WORKSHOP_MODS ${SERVER_CLIENT_WORKSHOP_MODS}
-ENV SERVER_CLIENT_MODS ${SERVER_CLIENT_MODS}
-ENV STEAM_SERVER_WORKSHOP_MODS ${STEAM_SERVER_WORKSHOP_MODS}
-ENV SERVER_SERVER_MODS ${SERVER_SERVER_MODS}
-ENV SERVER_PARAMETERS ${SERVER_PARAMETERS}
-
 USER root
 
-RUN apt-get update
-RUN apt-get install sudo
-RUN adduser --disabled-password --gecos '' arma3server
-RUN adduser arma3server sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN apt-get update && apt-get install sudo
+RUN adduser --disabled-password --gecos '' arma3server \
+    && adduser arma3server sudo \
+    && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER arma3server
 
-RUN mkdir -p /home/arma3server/tools
-RUN mkdir -p /home/arma3server/server
-RUN mkdir -p /home/arma3server/logs
+RUN mkdir -p /home/arma3server/tools \
+    && mkdir -p /home/arma3server/server \
+    && mkdir -p /home/arma3server/logs
 
-ADD arma3server-tools/* /home/arma3server/tools/
-RUN cd /home/arma3server/tools && ./arma3.sh install
-RUN cd /home/arma3server/tools && ./arma3.sh restart
+WORKDIR /home/arma3server/tools
+COPY arma3.sh ./ \
+    && getCollectionMods.py ./ \
+    && entrypoint.sh ./
+# RUN cd /home/arma3server/tools && ./arma3.sh install
+# RUN cd /home/arma3server/tools && ./arma3.sh restart
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+CMD [ "install" ]
