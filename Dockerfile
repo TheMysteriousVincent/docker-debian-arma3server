@@ -3,7 +3,7 @@ FROM debian:stable-slim
 USER root
 
 RUN apt-get update \
-	&& apt-get install -y sudo tmux lib32stdc++6 lib32gcc1 python3 wget python3-pip \
+	&& apt-get install -y sudo lib32stdc++6 lib32gcc1 python3 wget python3-pip \
 	&& pip3 install requests
 RUN adduser --disabled-password --gecos '' arma3server \
     && adduser arma3server sudo \
@@ -18,6 +18,8 @@ RUN mkdir -p /home/arma3server/tools \
 WORKDIR /home/arma3server/tools
 COPY getCollectionMods.py entrypoint.sh ./
 RUN sudo chmod 777 /home/arma3server/tools/*
+
+EXPOSE 2301-2305/udp
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "install" ]

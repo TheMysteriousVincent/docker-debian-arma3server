@@ -1,10 +1,5 @@
 #!/bin/bash
 
-STEAM_PATH_EXEC=/home/arma3server/Steam/steamcmd.sh
-A3S_PATH=/home/arma3server/server/
-A3S_TOOLS_PATH=/home/arma3server/tools/
-A3S_LOGS_PATH=/home/arma3server/logs/
-
 main () {
 	init_vars
 	case $1 in
@@ -38,7 +33,7 @@ main () {
 	"restart")
 		restart
 		;;
-	"help")
+	"help"|*)
 		help
 		;;
 	esac
@@ -46,40 +41,49 @@ main () {
 
 help () {
 	echo -e "Usage: ./entrypoint.sh <arg>"
-	echo -e "\tinstall\tInstalls the the whole server."
+	echo -e "\tinstall\t\tInstalls the the whole server."
+	echo -e "\tstart\t\tStarts the server."
+	echo -e "\tupdateServer\t\tUpdates the server."
+	echo -e "\tupdateMods\t\tUpdates all mods given by environment variables."
+	echo -e "\tconfigure\t\tCreates all necessary config files by environment variables."
+	echo -e "\tupdate\t\tUpdates the server and all needed mods from the Steam Workshop."
+	echo -e "\tstop\t\tStops the server. (currently unused)"
+	echo -e "\trestart\t\tRestarts the server. (currently unused)"
+	echo -e "\thelp\t\tDisplays this helpful help information."
 }
 
 install () {
-	if [ ! -f ~/Steam ]; then
-		if [ ! -f ~/Steam/steamcmd.sh ]; then
-			mkdir ~/Steam && cd ~/Steam
-			wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
-			tar -xzf steamcmd_linux.tar.gz
-			rm steamcmd_linux.tar.gz
-		fi
+	if [ ! -d ~/.steam ]; then
+		mkdir -p ~/.steam
+		wget -o ~/.steam https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+		tar -xzf ~/.steam/steamcmd_linux.tar.gz -C ~/.steam/
 	fi
 
 	update
 }
 
 init_vars () {
+	: ${STEAM_PATH_EXEC:=/home/arma3server/.steam/steamcmd.sh}
+	: ${A3S_PATH:=/home/arma3server}
+	: ${A3S_SERVER_PATH:=$A3S_PATH/server}
+	: ${A3S_TOOLS_PATH:=$A3S_PATH/tools}
+	: ${A3S_LOGS_PATH:=$A3S_PATH/logs}
 	: ${STEAM_LOGIN:=anonymous}
 	: ${STEAM_PASSWORD:=anonymous}
 	: ${STEAM_APP_ID:=233780}
 	: ${STEAM_API_KEY:=}
 
-	: ${A3S_PATH:=/home/arma3server/server}
-	: ${A3S_BIN:=$A3S_PATH/arma3server}
+	: ${A3S_BIN:=$A3S_SERVER_PATH/arma3server}
 	: ${A3S_LOGFILE:=/dev/stdout}
 	: ${A3S_RCON_PORT:=2306}
 	: ${A3S_RCON_PASSWORD:=$(cat /dev/urandom | tr -d -c a-z0-9- | dd bs=1 count=$((RANDOM%(24-16+1)+16)) 2> /dev/null)}
 	: ${A3S_OPTS:=}
 
 	: ${A3S_PORT:=2302}
-	: ${A3S_BEPATH:=$A3S_PATH/battleye}
-	: ${A3S_PROFILES:=$A3S_PATH/profiles}
-	: ${A3S_BASIC_CONFIG:=$A3S_PATH/basic.cfg}
-	: ${A3S_SERVER_CONFIG:=$A3S_PATH/server.cfg}
+	: ${A3S_BEPATH:=$A3S_SERVER_PATH/battleye}
+	: ${A3S_PROFILES:=$A3S_SERVER_PATH/profiles}
+	: ${A3S_BASIC_CONFIG:=$A3S_SERVER_PATH/basic.cfg}
+	: ${A3S_SERVER_CONFIG:=$A3S_SERVER_PATH/server.cfg}
 	: ${A3S_NAME:=default}
 	: ${A3S_CLIENT_MODS:=NULL}
 	: ${A3S_CLIENT_MODS_WORKSHOP:=NULL}
@@ -278,7 +282,6 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -disableServerThread=${A3S_DISABLE_SERVER_THREAD}"
 	fi
 
-	local tmpMods=""
 	if [ "${A3S_CLIENT_MODS}" != NULL ]; then
 		tmpMods="$A3S_CLIENT_MODS"
 	fi
@@ -297,12 +300,11 @@ create_opts () {
 		done
 	fi
 
-	if [ -v "$tmpMods" ]; then
+	if [ -v tmpMods ]; then
 		A3S_OPTS="${A3S_OPTS} -mod=$tmpMods"
 	fi
 	unset tmpMods
 
-	local tmpMods=""
 	if [ "${A3S_SERVER_MODS}" != NULL ]; then
 		tmpMods="$A3S_CLIENT_MODS"
 	fi
@@ -321,7 +323,7 @@ create_opts () {
 		done
 	fi
 
-	if [ -v "$tmpMods" ]; then
+	if [ -v tmpMods ]; then
 		A3S_OPTS="${A3S_OPTS} -serverMod=$tmpMods"
 	fi
 	unset tmpMods
@@ -333,16 +335,16 @@ configure () {
 	create_config_basic $A3S_BASIC_CONFIG
 	create_config_server $A3S_SERVER_CONFIG
 
-	if [ ! -d $A3S_PATH/battleye/launch ]; then
-		mkdir -m 770 -p $A3S_PATH/battleye/lauch
+	if [ ! -d $A3S_SERVER_PATH/battleye/launch ]; then
+		mkdir -m 770 -p $A3S_SERVER_PATH/battleye/lauch
 	fi
 
-	if [ ! -f $A3S_PATH/battleye/launch/beserver.cfg ]; then
-		create_config_battleye $A3S_PATH/battleye/launch/beserver.cfg
+	if [ ! -f $A3S_SERVER_PATH/battleye/launch/beserver.cfg ]; then
+		create_config_battleye $A3S_SERVER_PATH/battleye/launch/beserver.cfg
 	fi
 
-	if [ ! -f $A3S_PATH/battleye/beserver.cfg ]; then
-		create_config_battleye $A3S_PATH/battleye/beserver.cfg
+	if [ ! -f $A3S_SERVER_PATH/battleye/beserver.cfg ]; then
+		create_config_battleye $A3S_SERVER_PATH/battleye/beserver.cfg
 	fi
 }
 
@@ -591,7 +593,7 @@ getCollectionMods () {
 start () {
 	if ! status; then
 		create_opts
-		tmux new -d -s arma3server "$A3S_BIN $A3S_OPTS"
+		$A3S_BIN $A3S_OPTS
 	fi
 }
 
@@ -616,7 +618,7 @@ restart () {
 updateServer () {
 	$STEAM_PATH_EXEC \
 		+login $STEAM_USER $STEAM_PASS \
-		+force_install_dir $A3S_PATH \
+		+force_install_dir $A3S_SERVER_PATH \
 		+app_update 233780 validate \
 		+quit
 }
@@ -651,10 +653,10 @@ updateMods () {
 	done
 
 	echo "$opts"
-	echo "$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_PATH $opts +quit"
-	$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_PATH $opts +quit
+	echo "$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_SERVER_PATH $opts +quit"
+	$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_SERVER_PATH $opts +quit
 
-	toLower $A3S_PATH/steamapps/workshop/content/107410/
+	toLower $A3S_SERVER_PATH/steamapps/workshop/content/107410/
 }
 
 toLower () {
