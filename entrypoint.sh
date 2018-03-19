@@ -622,7 +622,7 @@ updateServer () {
 }
 
 updateMods () {
-	local mods=""
+	local mods=("")
 
 	if [ "${A3S_CLIENT_MODS_WORKSHOP}" != "NULL" ]; then
 		mods=("$(echo "${A3S_CLIENT_MODS_WORKSHOP}" | sed -e 's/;//')")
@@ -644,9 +644,10 @@ updateMods () {
 		done
 	fi
 
+	echo $mods
 	local opts=" "
 	for mod in ${mods[@]}; do
-		cmds="$cmds+workshop_download_item 107410 $mod validate "
+		opts="$opts+workshop_download_item 107410 $mod validate "
 	done
 
 	echo "$opts"
