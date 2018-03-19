@@ -649,7 +649,10 @@ toLower () {
 
 update () {
     updateServer
-    updateMods
+
+    if [ -v STEAM_API_KEY ]; then
+    	updateMods
+    fi
 }
 
 
