@@ -624,7 +624,7 @@ updateServer () {
 updateMods () {
 	local mods=""
 
-	if [ "${A3S_CLIENT_MODS_WORKSHOP}" != "NULL"]; then
+	if [ "${A3S_CLIENT_MODS_WORKSHOP}" != "NULL" ]; then
 		mods="$(echo "${A3S_CLIENT_MODS_WORKSHOP}" | sed -e 's/;//')"
 	fi
 
