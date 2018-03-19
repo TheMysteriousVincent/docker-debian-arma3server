@@ -625,22 +625,22 @@ updateMods () {
 	local mods=""
 
 	if [ "${A3S_CLIENT_MODS_WORKSHOP}" != "NULL" ]; then
-		mods="$(echo "${A3S_CLIENT_MODS_WORKSHOP}" | sed -e 's/;//')"
+		mods=("$(echo "${A3S_CLIENT_MODS_WORKSHOP}" | sed -e 's/;//')")
 	fi
 
 	if [ "${A3S_SERVER_MODS_WORKSHOP}" != "NULL" ]; then
-		mods="$mods $(echo "${A3S_SERVER_MODS_WORKSHOP}" | sed -e 's/;//')"
+		mods=("$mods" "$(echo "${A3S_SERVER_MODS_WORKSHOP}" | sed -e 's/;//')")
 	fi
 
 	if [ "${A3S_CLIENT_MODS_COLLECTION}" != "NULL" ]; then
 		for collection in $(echo "${A3S_CLIENT_MODS_COLLECTION}" | sed -e 's/;//'); do
-			mods="$mods $(getCollectionMods $collection)"
+			mods=("$mods" "$(getCollectionMods $collection)")
 		done
 	fi
 
 	if [ "${A3S_SERVER_MODS_COLLECTION}" != "NULL" ]; then
 		for collection in $(echo "${A3S_SERVER_MODS_COLLECTION}" | sed -e 's/;//'); do
-			mods="$mods $(getCollectionMods $collection)"
+			mods=("$mods" "$(getCollectionMods $collection)")
 		done
 	fi
 
