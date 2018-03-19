@@ -12,7 +12,7 @@ RUN adduser --disabled-password --gecos '' arma3server \
 USER arma3server
 
 RUN mkdir -p /home/arma3server/tools \
-    && mkdir -p /home/arma3server/server \
+    && mkdir -p /home/arma3server/server/steamapps/workshop/content/107410/ \
     && mkdir -p /home/arma3server/logs
 
 WORKDIR /home/arma3server/tools
