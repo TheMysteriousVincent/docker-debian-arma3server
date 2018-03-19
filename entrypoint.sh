@@ -649,6 +649,8 @@ updateMods () {
 		cmds="$cmds+workshop_download_item 107410 $mod validate "
 	done
 
+	echo "$opts"
+	echo "$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_PATH $opts +quit"
 	$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_PATH $opts +quit
 
 	toLower $A3S_PATH/steamapps/workshop/content/107410/
