@@ -17,6 +17,7 @@ RUN mkdir -p /home/arma3server/tools \
 
 WORKDIR /home/arma3server/tools
 COPY getCollectionMods.py entrypoint.sh ./
+RUN chmod 777 /home/arma3server/tools/*
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "install" ]

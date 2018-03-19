@@ -617,7 +617,7 @@ updateServer () {
 	$STEAM_PATH_EXEC \
 		+login $STEAM_USER $STEAM_PASS \
 		+force_install_dir $A3S_PATH \
-		+app_update 233780 validate
+		+app_update 233780 validate \
 		+quit
 }
 
