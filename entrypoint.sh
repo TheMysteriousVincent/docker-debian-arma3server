@@ -284,13 +284,13 @@ create_opts () {
 	fi
 
 	if [ "${A3S_CLIENT_WORKSHOP}" != NULL ]; then
-		for mod in ${$(${A3S_CLIENT_WORKSHOP} | sed -e 's/;//')}; do
+		for mod in $(${A3S_CLIENT_WORKSHOP} | sed -e 's/;//'); do
 			tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 		done
 	fi
 
 	if [ "${A3S_CLIENT_COLLECTION}" != NULL ]; then
-		for collection in ${$(${A3S_CLIENT_COLLECTION} | sed -e 's/;//')}; do
+		for collection in $(${A3S_CLIENT_COLLECTION} | sed -e 's/;//'); do
 			for mod in $(getCollectionMods $collection); do
 				tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 			done
@@ -308,14 +308,14 @@ create_opts () {
 	fi
 
 	if [ "${A3S_SERVER_WORKSHOP}" != NULL ]; then
-		for mod in ${$(${A3S_SERVER_WORKSHOP} | sed -e 's/;//')}; do
+		for mod in $(${A3S_SERVER_WORKSHOP} | sed -e 's/;//'); do
 			tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 		done
 	fi
 
 	if [ "${A3S_SERVER_COLLECTION}" != NULL ]; then
-		for collection in ${$(${A3S_SERVER_COLLECTION} | sed -e 's/;//')}; do
-			for mod in ${$(getCollectionMods $collection)}; do
+		for collection in $(${A3S_SERVER_COLLECTION} | sed -e 's/;//'); do
+			for mod in $(getCollectionMods $collection); do
 				tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 			done
 		done
@@ -621,17 +621,28 @@ updateServer () {
 		+quit
 }
 
-
-
 updateMods () {
-	local mods="$(echo "${A3S_CLIENT_MODS_WORKSHOP}" | sed -e 's/;//')"
-	mods="$mods $(echo "${A3S_SERVER_MODS_WORKSHOP}" | sed -e 's/;//')"
-	for collection in $(echo "${A3S_CLIENT_MODS_COLLECTION}" | sed -e 's/;//'); do
-		mods="$mods $(getCollectionMods $collection)"
-	done
-	for collection in $(echo "${A3S_CLIENT_MODS_COLLECTION}" | sed -e 's/;//'); do
-		mods="$mods $(getCollectionMods $collection)"
-	done
+	local mods=""
+
+	if [ "${A3S_CLIENT_MODS_WORKSHOP}" != "NULL"]; then
+		mods="$(echo "${A3S_CLIENT_MODS_WORKSHOP}" | sed -e 's/;//')"
+	fi
+
+	if [ "${A3S_SERVER_MODS_WORKSHOP}" != "NULL" ]; then
+		mods="$mods $(echo "${A3S_SERVER_MODS_WORKSHOP}" | sed -e 's/;//')"
+	fi
+
+	if [ "${A3S_CLIENT_MODS_COLLECTION}" != "NULL" ]; then
+		for collection in $(echo "${A3S_CLIENT_MODS_COLLECTION}" | sed -e 's/;//'); do
+			mods="$mods $(getCollectionMods $collection)"
+		done
+	fi
+
+	if [ "${A3S_SERVER_MODS_COLLECTION}" != "NULL" ]; then
+		for collection in $(echo "${A3S_SERVER_MODS_COLLECTION}" | sed -e 's/;//'); do
+			mods="$mods $(getCollectionMods $collection)"
+		done
+	fi
 
 	local opts=" "
 	for mod in ${mods[@]}; do
