@@ -55,7 +55,7 @@ help () {
 install () {
 	if [ ! -d ~/.steam ]; then
 		mkdir -p ~/.steam
-		wget -o ~/.steam https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+		wget -P ~/.steam https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
 		tar -xzf ~/.steam/steamcmd_linux.tar.gz -C ~/.steam/
 	fi
 
@@ -593,21 +593,16 @@ getCollectionMods () {
 start () {
 	if ! status; then
 		create_opts
-		$A3S_BIN $A3S_OPTS
+		$(cd $A3S_SERVER_PATH && $A3S_BIN $A3S_OPTS)
 	fi
 }
 
 status () {
-	if ! $(tmux list-sessions | grep -q arma3server); then
-		return 1
-	fi
-	return 0
+	echo "(currently unused)"
 }
 
 stop () {
-	if status; then
-		tmux kill-session -t arma3server
-	fi
+	echo "(currently unused)"
 }
 
 restart () {
