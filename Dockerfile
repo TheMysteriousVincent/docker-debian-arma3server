@@ -2,7 +2,7 @@ FROM debian:stable-slim
 
 USER root
 
-RUN apt-get update && apt-get install sudo
+RUN apt-get update && apt-get install -y sudo tmux lib32stdc++6 lib32gcc1 python3 wget
 RUN adduser --disabled-password --gecos '' arma3server \
     && adduser arma3server sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -14,9 +14,7 @@ RUN mkdir -p /home/arma3server/tools \
     && mkdir -p /home/arma3server/logs
 
 WORKDIR /home/arma3server/tools
-COPY arma3.sh ./ \
-    && getCollectionMods.py ./ \
-    && entrypoint.sh ./
+COPY getCollectionMods.py entrypoint.sh ./
 # RUN cd /home/arma3server/tools && ./arma3.sh install
 # RUN cd /home/arma3server/tools && ./arma3.sh restart
 
