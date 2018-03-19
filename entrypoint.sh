@@ -598,7 +598,7 @@ start () {
 }
 
 status () {
-	echo "(currently unused)"
+	return 1
 }
 
 stop () {
