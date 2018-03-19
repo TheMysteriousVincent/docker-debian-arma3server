@@ -2,41 +2,46 @@
 
 main () {
 	init_vars
-	case $1 in
-	"install")
-		install
-		;;
-	"start")
-		start
-		;;
-	"updateServer")
-		stop
-		updateServer
-		start
-		;;
-	"updateMods")
-		stop
-		updateMods
-		start
-		;;
-	"configure")
-		configure
-		;;
-	"update")
-		stop
-		update
-		start
-		;;
-	"stop")
-		stop
-		;;
-	"restart")
-		restart
-		;;
-	"help"|*)
-		help
-		;;
-	esac
+
+	for arg in $@; do
+		case $arg in
+		"install")
+			install
+			;;
+		"start")
+			start
+			exit
+			;;
+		"updateServer")
+			stop
+			updateServer
+			;;
+		"updateMods")
+			stop
+			updateMods
+			;;
+		"configure")
+			configure
+			;;
+		"update")
+			stop
+			update
+			start
+			;;
+		"stop")
+			stop
+			exit
+			;;
+		"restart")
+			restart
+			exit
+			;;
+		"help"|*)
+			help
+			exit
+			;;
+		esac
+	done
 }
 
 help () {
