@@ -74,8 +74,8 @@ init_vars () {
 	: ${A3S_PORT:=2302}
 	: ${A3S_BEPATH:=$A3S_SERVER_PATH/battleye}
 	: ${A3S_PROFILES:=$A3S_SERVER_PATH/profiles}
-	: ${A3S_BASIC_CONFIG:=basic.cfg}
-	: ${A3S_SERVER_CONFIG:=server.cfg}
+	: ${A3S_BASIC_CONFIG:=$A3S_SERVER_PATH/basic.cfg}
+	: ${A3S_SERVER_CONFIG:=$A3S_SERVER_PATH/server.cfg}
 	: ${A3S_NAME:=default}
 	: ${A3S_CLIENT_MODS:=NULL}
 	: ${A3S_CLIENT_MODS_WORKSHOP:=NULL}
@@ -344,8 +344,8 @@ writeConfigEntry () {
         if [ ! -f $1 ]; then
                 touch $1
         fi
-        if [ "$(grep "^$2\s=.*" $1)" != "" ]; then
-                sed -i "s/^$2\s=.*/$2=$3;/" $1
+        if [ "$(grep "^$2\s*=.*" $1)" != "" ]; then
+                sed -i "s/^$2\s*=.*/$2=$3;/" $1
         else
                 echo -e "$2 = $3;" >> $1
         fi
@@ -563,8 +563,8 @@ create_config_basic () {
 	fi
 
 	if [ -v A3S_MAX_PACKET_SIZE ]; then
-		if [ "$(grep "maxPacketSize\s=.*;" $1)" != "" ]; then
-			sed -i "s/maxPacketSize\s=.*;/maxPacketSize=$A3S_MAX_PACKET_SIZE;/" $1
+		if [ "$(grep "maxPacketSize\s*=.*;" $1)" != "" ]; then
+			sed -i "s/maxPacketSize\s*=.*;/maxPacketSize=$A3S_MAX_PACKET_SIZE;/" $1
 		else
 			echo -e "class Socket { maxPacketSize=$A3S_MAX_PACKET_SIZE; };" >> $1
 		fi
