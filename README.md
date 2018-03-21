@@ -144,7 +144,7 @@ Variable | Description | Datatype
 `A3S_NETLOG` | Alias to server parameter `-netlog`. Activated with: `A3S_NETLOG=true` | `bool`
 `A3S_DISABLE_SERVER_THREAD` | Alias to server parameter `-disableServerThread`. Activated with `A3S_DISABLE_SERVER_THREAD=true` | `bool`
 
-## `server.cfg` Variables
+### `server.cfg` Variables
 Nearly all available config entries can be added with environment variables.
 This are the current ones:
 
@@ -191,7 +191,7 @@ Variable | Alias
 `A3S_MISSION_WHITELIST` | `missionWhitelist`
 `A3S_MISSIONS` | `class Missions`
 
-## `basic.cfg` Variables
+### `basic.cfg` Variables
 This are the current ones of the `basic.cfg` file:
 
 Variable | Alias
