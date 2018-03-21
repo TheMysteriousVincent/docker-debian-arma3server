@@ -24,17 +24,7 @@ main () {
 			configure
 			;;
 		"update")
-			stop
 			update
-			start
-			;;
-		"stop")
-			stop
-			exit
-			;;
-		"restart")
-			restart
-			exit
 			;;
 		"help"|*)
 			help
@@ -596,23 +586,7 @@ getCollectionMods () {
 }
 
 start () {
-	if ! status; then
-		create_opts
-		$(cd $A3S_SERVER_PATH && $A3S_BIN $A3S_OPTS)
-	fi
-}
-
-status () {
-	return 1
-}
-
-stop () {
-	echo "(currently unused)"
-}
-
-restart () {
-	stop
-	start
+	$(cd $A3S_SERVER_PATH && $A3S_BIN $A3S_OPTS)
 }
 
 updateServer () {
@@ -646,14 +620,11 @@ updateMods () {
 		done
 	fi
 
-	echo $mods
 	local opts=" "
 	for mod in ${mods[@]}; do
 		opts="$opts+workshop_download_item 107410 $mod validate "
 	done
 
-	echo "$opts"
-	echo "$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_SERVER_PATH $opts +quit"
 	$STEAM_PATH_EXEC +login $STEAM_USER $STEAM_PASS +force_install_dir $A3S_SERVER_PATH $opts +quit
 
 	toLower $A3S_SERVER_PATH/steamapps/workshop/content/107410/
