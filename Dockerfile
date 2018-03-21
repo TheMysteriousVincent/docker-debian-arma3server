@@ -19,7 +19,7 @@ WORKDIR /home/arma3server/tools
 COPY getCollectionMods.py entrypoint.sh ./
 RUN sudo chmod 777 /home/arma3server/tools/*
 
-EXPOSE 2301-2305/udp
+EXPOSE 2301-2306/udp
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "install" ]
