@@ -74,8 +74,8 @@ init_vars () {
 	: ${A3S_PORT:=2302}
 	: ${A3S_BEPATH:=$A3S_SERVER_PATH/battleye}
 	: ${A3S_PROFILES:=$A3S_SERVER_PATH/profiles}
-	: ${A3S_BASIC_CONFIG:=$A3S_SERVER_PATH/basic.cfg}
-	: ${A3S_SERVER_CONFIG:=$A3S_SERVER_PATH/server.cfg}
+	: ${A3S_BASIC_CONFIG:=basic.cfg}
+	: ${A3S_SERVER_CONFIG:=server.cfg}
 	: ${A3S_NAME:=default}
 	: ${A3S_CLIENT_MODS:=NULL}
 	: ${A3S_CLIENT_MODS_WORKSHOP:=NULL}
