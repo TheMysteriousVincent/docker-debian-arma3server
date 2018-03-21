@@ -281,14 +281,14 @@ create_opts () {
 		tmpMods="$A3S_CLIENT_MODS"
 	fi
 
-	if [ "${A3S_CLIENT_WORKSHOP}" != NULL ]; then
-		for mod in $(${A3S_CLIENT_WORKSHOP} | sed -e 's/;//'); do
+	if [ "${A3S_CLIENT_MODS_WORKSHOP}" != NULL ]; then
+		for mod in $(${A3S_CLIENT_MODS_WORKSHOP} | sed -e 's/;//'); do
 			tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 		done
 	fi
 
-	if [ "${A3S_CLIENT_COLLECTION}" != NULL ]; then
-		for collection in $(${A3S_CLIENT_COLLECTION} | sed -e 's/;//'); do
+	if [ "${A3S_CLIENT_MODS_COLLECTION}" != NULL ]; then
+		for collection in $(${A3S_CLIENT_MODS_COLLECTION} | sed -e 's/;//'); do
 			for mod in $(getCollectionMods $collection); do
 				tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 			done
@@ -304,14 +304,14 @@ create_opts () {
 		tmpMods="$A3S_CLIENT_MODS"
 	fi
 
-	if [ "${A3S_SERVER_WORKSHOP}" != NULL ]; then
-		for mod in $(${A3S_SERVER_WORKSHOP} | sed -e 's/;//'); do
+	if [ "${A3S_SERVER_MODS_WORKSHOP}" != NULL ]; then
+		for mod in $(${A3S_SERVER_MODS_WORKSHOP} | sed -e 's/;//'); do
 			tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 		done
 	fi
 
-	if [ "${A3S_SERVER_COLLECTION}" != NULL ]; then
-		for collection in $(${A3S_SERVER_COLLECTION} | sed -e 's/;//'); do
+	if [ "${A3S_SERVER_MODS_COLLECTION}" != NULL ]; then
+		for collection in $(${A3S_SERVER_MODS_COLLECTION} | sed -e 's/;//'); do
 			for mod in $(getCollectionMods $collection); do
 				tmpMods="steamapps/workshop/content/107410/$mod;$tmpMods"
 			done
