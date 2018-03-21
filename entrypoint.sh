@@ -63,8 +63,8 @@ init_vars () {
 	: ${A3S_SERVER_PATH:=$A3S_PATH/server}
 	: ${A3S_TOOLS_PATH:=$A3S_PATH/tools}
 	: ${A3S_LOGS_PATH:=$A3S_PATH/logs}
-	: ${STEAM_LOGIN:=anonymous}
-	: ${STEAM_PASSWORD:=anonymous}
+	: ${STEAM_USER:=anonymous}
+	: ${STEAM_PASS:=anonymous}
 	: ${STEAM_APP_ID:=233780}
 	: ${STEAM_API_KEY:=}
 
@@ -157,11 +157,11 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -ip=${A3S_IP}"
 	fi
 
-	if [ "${A3S_AUTOINIT}" != NULL ]; then
+	if [ "${A3S_AUTOINIT}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -autoInit"
 	fi
 
-	if [ "${A3S_LOAD_MISSION_TO_MEMORY}" != NULL ]; then
+	if [ "${A3S_LOAD_MISSION_TO_MEMORY}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -loadMissionToMemory"
 	fi
 
@@ -193,19 +193,19 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -malloc=${A3S_MALLOC}"
 	fi
 
-	if [ "${A3S_ENABLE_HT}" != NULL ]; then
+	if [ "${A3S_ENABLE_HT}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -enableHT"
 	fi
 
-	if [ "${A3S_HUGEPAGES}" != NULL ]; then
+	if [ "${A3S_HUGEPAGES}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -hugepages"
 	fi
 
-	if [ "${A3S_SHOW_SCRIPT_ERRORS}" != NULL ]; then
+	if [ "${A3S_SHOW_SCRIPT_ERRORS}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -showScriptErrors"
 	fi
 
-	if [ "${A3S_FILE_PATCHING}" != NULL ]; then
+	if [ "${A3S_FILE_PATCHING}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -filePatching"
 	fi
 
@@ -213,7 +213,7 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -init=${A3S_INIT}"
 	fi
 
-	if [ "${A3S_AUTOTEST}" != NULL ]; then
+	if [ "${A3S_AUTOTEST}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -autotest"
 	fi
 
@@ -221,27 +221,27 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -beta=${A3S_BETA}"
 	fi
 
-	if [ "${A3S_CHECK_SIGNATURES}" != NULL ]; then
+	if [ "${A3S_CHECK_SIGNATURES}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -checkSignatures"
 	fi
 
-	if [ "${A3S_CRASHDIAG}" != NULL ]; then
+	if [ "${A3S_CRASHDIAG}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -crashDiag"
 	fi
 
-	if [ "${A3S_NO_FILE_PATCHING}" != NULL ]; then
+	if [ "${A3S_NO_FILE_PATCHING}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -noFilePatching"
 	fi
 
-	if [ "${A3S_DEBUG_CALL_EXTENSION}" != NULL ]; then
+	if [ "${A3S_DEBUG_CALL_EXTENSION}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -debugCallExtension"
 	fi
 
-	if [ "${A3S_NO_LAND}" != NULL ]; then
+	if [ "${A3S_NO_LAND}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -noLand"
 	fi
 
-	if [ "${A3S_BULDOZER}" != NULL ]; then
+	if [ "${A3S_BULDOZER}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -buldozer"
 	fi
 
@@ -253,11 +253,11 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -password=${A3S_PASSWORD}"
 	fi
 
-	if [ "${A3S_SERVER}" != NULL ]; then
+	if [ "${A3S_SERVER}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -server"
 	fi
 
-	if [ "${A3S_CLIENT}" != NULL ]; then
+	if [ "${A3S_CLIENT}" == "true" ]; then
 		A3S_OPTS="${A3S_OPTS} -client"
 	fi
 
@@ -269,12 +269,12 @@ create_opts () {
 		A3S_OPTS="${A3S_OPTS} -ranking=${A3S_RANKING}"
 	fi
 
-	if [ "${A3S_NETLOG}" != NULL ]; then
-		A3S_OPTS="${A3S_OPTS} -netlog=${A3S_NETLOG}"
+	if [ "${A3S_NETLOG}" == "true" ]; then
+		A3S_OPTS="${A3S_OPTS} -netlog"
 	fi
 
-	if [ "${A3S_DISABLE_SERVER_THREAD}" != NULL ]; then
-		A3S_OPTS="${A3S_OPTS} -disableServerThread=${A3S_DISABLE_SERVER_THREAD}"
+	if [ "${A3S_DISABLE_SERVER_THREAD}" == "true" ]; then
+		A3S_OPTS="${A3S_OPTS} -disableServerThread"
 	fi
 
 	if [ "${A3S_CLIENT_MODS}" != NULL ]; then
@@ -593,7 +593,7 @@ updateServer () {
 	$STEAM_PATH_EXEC \
 		+login $STEAM_USER $STEAM_PASS \
 		+force_install_dir $A3S_SERVER_PATH \
-		+app_update 233780 validate \
+		+app_update $STEAM_APP_ID validate \
 		+quit
 }
 
