@@ -607,6 +607,7 @@ getCollectionMods () {
 }
 
 start () {
+	create_opts
 	configure
 	$(cd $A3S_SERVER_PATH && $A3S_BIN $A3S_OPTS)
 }
