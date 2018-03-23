@@ -347,7 +347,7 @@ writeConfigEntry () {
 	if [ "$(grep "^$2\s*=.*" $1)" != "" ]; then
 		sed -i "s/^$2\s*=.*/$(echo ""$2"" | sed ""s/\\\[\\\]/[]/"")=$3;/" $1
 	else
-		echo -e "$2 = $3;" >> $1
+		echo -e "$(echo ""$2"" | sed ""s/\\\[\\\]/[]/"") = $3;" >> $1
 	fi
 }
 
